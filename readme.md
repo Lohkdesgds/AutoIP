@@ -5,15 +5,15 @@
 
 ### How to use
 * *First you have to setup an account on dynv6 website (https://dynv6.com)*
-* *Register a URL (probably called Zone or Domain) for your host. Let's say you got `hello.dynv6.net`*
+* *Register a URL (probably called Zone or Domain) for your host. Let's say you got `TheURLYouCreated.dynv6.net`*
 * *Go to its instruction page and get the token (something like `aBCdefghiJKlmnopQRStuvwXyz-012`)*
-* *Get this app (build it using cmake on whatever platorm you are or maybe get on releases if thereś one)*
+* *Get this app (build it using cmake on whatever platorm you are or maybe get on releases if there's one)*
 * *Create a batch/shell script (for easier use) with:*
 ```sh
 # On Linux it should look like
-./AutoIP -t 120.0 --token `your-fancy-token-here` --hostname `TheURLYouCreated.something.net` -v
+./AutoIP -t 120.0 --token your-fancy-token-here --hostname TheURLYouCreated.dynv6.net -v
 # On Windows it should look like
-AutoIP.exe -t 120.0 --token `your-fancy-token-here` --hostname `TheURLYouCreated.something.net` -v
+AutoIP.exe -t 120.0 --token your-fancy-token-here --hostname TheURLYouCreated.dynv6.net -v
 ```
 * *Run the script file*
 
