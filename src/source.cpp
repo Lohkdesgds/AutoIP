@@ -17,11 +17,6 @@ const std::string urlhost = "ipv6-test.com";
 const std::string rawautodns = "ipv6.dynv6.com";
 const std::string rawautodns4 = "ipv4.dynv6.com";
 const std::string rawautodns_pos = "/api/update";
-/*const std::string autodns[] = {
-	"ipv6.dynv6.com/api/update?hostname=", // blackmotion.dynv6.net
-	"&token=", //tnAk8yEH3qAVq23yQT3xtXWHWvxj-4
-	"&ipv6=" // that ivp6
-};*/
 
 std::vector<char> read_timed(Lunaris::TCP_client&);
 void delay(const double);
@@ -301,10 +296,5 @@ std::string getPAGE(const std::string durl, std::string hostname, std::string to
 
     for(const auto& it : __gett) getting += it;
 
-    //size_t pos = getting.rfind('\n');
-    //if (pos != std::string::npos){
-    //    return getting.substr(0, pos-1);
-    //}
-	//else return getting;
     return getting;
 }
