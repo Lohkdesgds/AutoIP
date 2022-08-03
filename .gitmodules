@@ -1,0 +1,3 @@
+[submodule "deps/socket"]
+	path = deps/socket
+	url = https://github.com/Lohkdesgds/Lunaris-Socket
