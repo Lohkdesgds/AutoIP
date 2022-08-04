@@ -1,6 +1,6 @@
 #undef UNICODE
 
-#include "socket.h"
+#include "socket/socket.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -9,7 +9,7 @@
 #include <string>
 #include <thread>
 
-const std::string version = "2.0.0MP";
+const std::string version = "2.0.1MP";
 
 const std::string url = "ipv6-test.com";// "dynv6.com/api/update\0";
 const std::string urlget = "/api/myip.php";

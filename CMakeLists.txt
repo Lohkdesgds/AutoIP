@@ -12,12 +12,12 @@ else ()
 endif ()
 
 
-file(GLOB_RECURSE source_list "src/*.cpp" "include/*.hpp")
+file(GLOB_RECURSE source_list "src/*.cpp" "deps")
 add_executable(${PROJECT_NAME} ${source_list})
 
 target_include_directories(${PROJECT_NAME} PRIVATE 
     #httplib
-    "include"
+    "deps"
 )
 
 # Set C++ version

@@ -1,2 +1,4 @@
 release.sh
 build/**
+/.vs
+/out/build
