@@ -8,12 +8,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.6
+        with:
+          submodules: 'true'
 
       - name: "CMake build"
         run: |
-          ls
-          cd $GITHUB_WORKSPACE
-          ls
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
           cmake --build build --target all --config Release -- -j4
 
