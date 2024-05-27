@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4.1.6
         with:
           submodules: 'true'
-          
+
       - name: Setup Ninja
         uses: ashutoshvarma/setup-ninja@master
 
@@ -34,13 +34,13 @@ jobs:
           build-type: Release
 
       - name: "Rename for Artifact"
-        run: mv build/AutoIP build/AutoIP_${{ matrix.config.name }}
+        run: mv ${{ runner.workspace }}/build/AutoIP ${{ runner.workspace }}/build/AutoIP_${{ matrix.config.name }}
 
       - name: Save build folder as artifact
         uses: actions/upload-artifact@v4
         with:
           name: release_${{ matrix.config.name }}
-          path: build/AutoIP_${{ matrix.config.name }}
+          path: ${{ runner.workspace }}/build/AutoIP_${{ matrix.config.name }}
 
 
 
