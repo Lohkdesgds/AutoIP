@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-project-ubuntu:
-    name: Build Project
+    name: Build Project on Ubuntu
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,7 +30,7 @@ jobs:
           path: build/AutoIP_ubuntu
 
   build-project-windows:
-    name: Build Project
+    name: Build Project on Windows
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -52,7 +52,7 @@ jobs:
           name: release_windows
           path: build/AutoIP_windows
    
-  build-project-ubuntu:
+  upload-release:
     name: Publish release
     runs-on: ubuntu-latest         
     steps:
