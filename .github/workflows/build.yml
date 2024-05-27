@@ -54,7 +54,8 @@ jobs:
    
   upload-release:
     name: Publish release
-    runs-on: ubuntu-latest         
+    runs-on: ubuntu-latest
+    needs: [build-project-ubuntu, build-project-windows]
     steps:
       - name: "Download back Ubuntu file"
         uses: actions/download-artifact@master
