@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(AutoIP VERSION 1.0 DESCRIPTION "An easy to use app to keep requesting HTTP stuff in time intervals")
-
 IF (WIN32)
   # set stuff for windows
   set(CMAKE_C_COMPILER cl)
@@ -11,6 +9,8 @@ ELSE()
   set(CMAKE_C_COMPILER gcc)
   set(CMAKE_CPP_COMPILER g++)
 ENDIF()
+
+project(AutoIP VERSION 1.0 DESCRIPTION "An easy to use app to keep requesting HTTP stuff in time intervals")
 
 # Release?
 set(CMAKE_BUILD_TYPE Release)
