@@ -20,11 +20,53 @@ jobs:
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
           cmake --build build --target all --config Release -- -j4
 
+      - name: "Rename for Artifact"
+        run: mv build/AutoIP build/AutoIP_ubuntu
+
       - name: Save build folder as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build_folder
-          path: build/
+          name: release_ubuntu
+          path: build/AutoIP_ubuntu
+
+  build-project-windows:
+    name: Build Project
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.6
+        with:
+          submodules: 'true'
+
+      - name: "CMake build"
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --target all --config Release -- -j4
+
+      - name: "Rename for Artifact"
+        run: mv build/AutoIP build/AutoIP_windows
+
+      - name: Save build folder as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release_windows
+          path: build/AutoIP_windows
+   
+  build-project-ubuntu:
+    name: Publish release
+    runs-on: ubuntu-latest         
+    steps:
+      - name: "Download back Ubuntu file"
+        uses: actions/download-artifact@master
+        with:
+          name: release_ubuntu
+          path: release_ubuntu # file should be at release_ubuntu/AutoIP_ubuntu
+
+      - name: "Download back Windows file"
+        uses: actions/download-artifact@master
+        with:
+          name: release_windows
+          path: release_windows # file should be at release_windows/AutoIP_windows
 
       - name: Release
         uses: softprops/action-gh-release@v2
@@ -32,4 +74,7 @@ jobs:
           body_path: release_changelog.txt
           tag_name: ${{ github.ref_name }}
           files: |
-            build/AutoIP
+            release_ubuntu/AutoIP_ubuntu
+            release_windows/AutoIP_windows
+          
+    
