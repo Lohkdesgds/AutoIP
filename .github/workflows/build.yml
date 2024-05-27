@@ -11,6 +11,9 @@ jobs:
 
       - name: "CMake build"
         run: |
+          ls
+          cd $GITHUB_WORKSPACE
+          ls
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
           cmake --build build --target all --config Release -- -j4
 
