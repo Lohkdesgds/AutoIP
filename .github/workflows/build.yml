@@ -6,56 +6,95 @@ on:
       - v*
 
 jobs:
-  build-project-ubuntu:
-    name: Build Project on Ubuntu
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4.1.6
-        with:
-          submodules: 'true'
 
-      - name: "CMake build"
-        run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-          cmake --build build --target all --config Release -- -j4
+  build:
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+          - { name: "windows", os: windows-latest, cc: "cl", cxx: "cl" }
+          - { name: "ubuntu", os: ubuntu-latest, cc: "gcc", cxx: "g++" }
+        
+    steps:
+      - name: Setup Ninja
+        uses: ashutoshvarma/setup-ninja@master
+
+      - name: Build with CMake
+        uses: ashutoshvarma/action-cmake-build@master
+        with:
+          build-dir: ${{ runner.workspace }}/build
+          cc: ${{ matrix.config.cc }}
+          cxx: ${{ matrix.config.cxx }}
+          configure-options: -G Ninja
+          build-type: Release
 
       - name: "Rename for Artifact"
-        run: mv build/AutoIP build/AutoIP_ubuntu
+        run: mv build/AutoIP build/AutoIP_${{ matrix.config.name }}
 
       - name: Save build folder as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release_ubuntu
-          path: build/AutoIP_ubuntu
+          name: release_${{ matrix.config.name }}
+          path: build/AutoIP_${{ matrix.config.name }}
 
-  build-project-windows:
-    name: Build Project on Windows
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4.1.6
-        with:
-          submodules: 'true'
 
-      - name: "CMake build"
-        run: |
-          cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release
-          cmake --build build --target all --config Release -- -j4
 
-      - name: "Rename for Artifact"
-        run: mv build/AutoIP build/AutoIP_windows
 
-      - name: Save build folder as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release_windows
-          path: build/AutoIP_windows
+#  build-project-ubuntu:
+#    name: Build Project on Ubuntu
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4.1.6
+#        with:
+#          submodules: 'true'
+#
+#      - name: "CMake build"
+#        uses: threeal/cmake-action@main
+#        with:
+#          generator: Ninja
+#          c-compiler: gcc
+#          cxx-compiler: g++
+#        
+#
+#      - name: "Rename for Artifact"
+#        run: mv build/AutoIP build/AutoIP_ubuntu
+#
+#      - name: Save build folder as artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: release_ubuntu
+#          path: build/AutoIP_ubuntu
+#
+#  build-project-windows:
+#    name: Build Project on Windows
+#    runs-on: windows-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4.1.6
+#        with:
+#          submodules: 'true'
+#
+#      - name: "CMake build"
+#        uses: threeal/cmake-action@main
+#        with:
+#          generator: Ninja
+#          c-compiler: cl
+#          cxx-compiler: cl
+#
+#      - name: "Rename for Artifact"
+#        run: mv build/AutoIP build/AutoIP_windows
+#
+#      - name: Save build folder as artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: release_windows
+#          path: build/AutoIP_windows
    
   upload-release:
     name: Publish release
     runs-on: ubuntu-latest
-    needs: [build-project-ubuntu, build-project-windows]
+    needs: [build]
     steps:
       - name: "Download back Ubuntu file"
         uses: actions/download-artifact@master
