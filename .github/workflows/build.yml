@@ -21,6 +21,11 @@ jobs:
         with:
           submodules: 'true'
 
+      - uses: ilammy/msvc-dev-cmd@v1
+        if:  ${{ matrix.config.name == 'windows' }} 
+        with:
+          arch: amd64
+
       - name: Setup Ninja
         uses: ashutoshvarma/setup-ninja@master
 
