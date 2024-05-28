@@ -12,8 +12,8 @@ jobs:
     strategy:
       matrix:
         config:
-          - { name: "windows", os: windows-latest, cc: "cl", cxx: "cl" }
-          - { name: "ubuntu", os: ubuntu-latest, cc: "gcc", cxx: "g++" }
+          - { name: "windows", os: windows-latest, cc: "cl", cxx: "cl", ext: ".exe" }
+          - { name: "ubuntu", os: ubuntu-latest, cc: "gcc", cxx: "g++", ext: "" }
         
     steps:
       - name: Checkout
@@ -39,13 +39,13 @@ jobs:
           build-type: Release
 
       - name: "Rename for Artifact"
-        run: mv ${{ runner.workspace }}/build/AutoIP ${{ runner.workspace }}/build/AutoIP_${{ matrix.config.name }}
+        run: mv ${{ runner.workspace }}/build/AutoIP${{ matrix.config.ext }} ${{ runner.workspace }}/build/AutoIP_${{ matrix.config.name }}${{ matrix.config.ext }}
 
       - name: Save build folder as artifact
         uses: actions/upload-artifact@v4
         with:
           name: release_${{ matrix.config.name }}
-          path: ${{ runner.workspace }}/build/AutoIP_${{ matrix.config.name }}
+          path: ${{ runner.workspace }}/build/AutoIP_${{ matrix.config.name }}${{ matrix.config.ext }}
 
 
 
@@ -125,6 +125,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           files: |
             release_ubuntu/AutoIP_ubuntu
-            release_windows/AutoIP_windows
+            release_windows/AutoIP_windows.exe
           
     
