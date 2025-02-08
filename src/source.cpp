@@ -9,7 +9,7 @@
 #include <string>
 #include <thread>
 
-const std::string version = "2.0.1MP";
+const std::string version = "2.0.2MP";
 
 const std::string url = "ipv6-test.com";// "dynv6.com/api/update\0";
 const std::string urlget = "/api/myip.php";
@@ -182,17 +182,28 @@ int main(int argc, char* argv[])
 			if (using_dynv6)
 			{
 				newtemp = getPAGE(rawautodns, hostname, token, (use_6to4_instead ? "6to4" : ""/*auto*/));
-                if (newtemp.find("HTTP/1.1 200 OK") != std::string::npos) {
-                    if (full || was_diff || was_null) std::cout << GetTodayDayNow() << "[INFO] HTTP/1.1 200 OK!" << std::endl;
+
+				constexpr char tofind[] = "HTTP/1.1 ";
+				constexpr size_t tofind_len = sizeof(tofind) - 1;
+			
+				auto point = newtemp.find(tofind);			
+				int http_res = point == std::string::npos ? 0 : atoi(newtemp.c_str() + point + tofind_len);
+
+                if (http_res >= 200 && http_res < 300) {
+                    if (full || was_diff || was_null) std::cout << GetTodayDayNow() << "[INFO] Everything good! HTTP " << http_res << std::endl;
                 }
-                else std::cout << GetTodayDayNow() << "[WARN] " << (newtemp.empty() ? "Dynv6 didn't return a thing!" : newtemp) << std::endl;
+                else std::cout << GetTodayDayNow() << "[WARN] " << (newtemp.empty() ? ("Dynv6 possible bad response! HTTP " + std::to_string(http_res)) : ("HTTP " + std::to_string(http_res) + " error: " + newtemp)) << std::endl;
 
 				if (also_update_ipv4) {
                     newtemp = getPAGE(rawautodns4, hostname, token, "", true);
-                    if (newtemp.find("HTTP/1.1 200 OK") != std::string::npos) {
-                        if (full || was_diff || was_null) std::cout << GetTodayDayNow() << "[INFO][IPV4 PART] HTTP/1.1 200 OK!" << std::endl;
+
+					point = newtemp.find(tofind);			
+					http_res = point == std::string::npos ? 0 : atoi(newtemp.c_str() + point + tofind_len);
+
+					if (http_res >= 200 && http_res < 300) {
+						if (full || was_diff || was_null) std::cout << GetTodayDayNow() << "[INFO] Everything good! HTTP " << http_res << std::endl;
                     }
-                    else std::cout << GetTodayDayNow() << "[WARN][IPV4 PART] " << (newtemp.empty() ? "Dynv6 didn't return a thing!" : newtemp)  << std::endl;
+                    else std::cout << GetTodayDayNow() << "[WARN][IPV4 PART] " << (newtemp.empty() ? ("Dynv6 possible bad response! HTTP" + std::to_string(http_res)) : ("HTTP " + std::to_string(http_res) + " error: " + newtemp))  << std::endl;
                 }
 			}
             else {
